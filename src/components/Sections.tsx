@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import {
   AlertTriangle, BookOpen, Coins, Wallet, GraduationCap, BarChart3,
   Shield, Globe2, Award, Zap, FileCheck, Users, Trophy, TrendingUp,

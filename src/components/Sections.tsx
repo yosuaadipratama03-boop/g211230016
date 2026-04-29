@@ -6,7 +6,6 @@ import {
   Cpu, Layers, Sparkles, ArrowRight, Check, X, Clock, Building2, Rocket
 } from "lucide-react";
 import { Section, SectionHeader } from "./Section";
-import dashboardImg from "@/assets/dashboard-demo.jpg";
 import { ProposalSimulator } from "./ProposalSimulator";
 
 const fadeUp = {

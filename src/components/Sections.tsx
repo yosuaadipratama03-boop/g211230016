@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import {
   AlertTriangle, BookOpen, Coins, Wallet, GraduationCap, BarChart3,
   Shield, Globe2, Award, Zap, FileCheck, Users, Trophy, TrendingUp,
@@ -311,6 +312,12 @@ export const Demo = () => {
         title={<>Lihat <span className="text-gradient-mint">platform bekerja</span>, langkah demi langkah.</>}
         desc="Simulasi alur lengkap dari pendaftaran UMKM hingga pelaporan dana ke investor."
       />
+      <motion.div {...fadeUp} transition={{ duration: 0.5 }} className="mb-10 flex flex-wrap items-center gap-4">
+        <Link to="/dashboard" className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary-glow px-6 py-3.5 font-semibold text-primary-foreground glow-mint hover:scale-105 transition-transform">
+          Buka Live Dashboard <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+        </Link>
+        <span className="font-mono text-xs text-muted-foreground">Simulasi penuh — tidak perlu wallet</span>
+      </motion.div>
       <div className="grid lg:grid-cols-12 gap-8 items-start">
         <div className="lg:col-span-7 space-y-4">
           {flow.map((f, i) => (

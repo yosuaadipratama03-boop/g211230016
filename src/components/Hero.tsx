@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
 import heroImg from "@/assets/hero-blockchain.jpg";
 
@@ -27,10 +28,10 @@ export const Hero = () => (
           tanpa perantara, transparan di blockchain, dan diperkuat modul edukasi bisnis.
         </p>
         <div className="flex flex-wrap gap-4">
-          <a href="#solution" className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary-glow px-7 py-4 font-semibold text-primary-foreground glow-mint hover:scale-105 transition-transform">
-            Mulai Sebagai UMKM
+          <Link to="/dashboard" className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary-glow px-7 py-4 font-semibold text-primary-foreground glow-mint hover:scale-105 transition-transform">
+            Buka Dashboard
             <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-          </a>
+          </Link>
           <a href="#how" className="inline-flex items-center gap-2 rounded-xl glass px-7 py-4 font-semibold hover:border-primary/40 transition-colors">
             Lihat Cara Kerja
           </a>

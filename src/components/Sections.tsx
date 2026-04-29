@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { Section, SectionHeader } from "./Section";
 import dashboardImg from "@/assets/dashboard-demo.jpg";
+import { ProposalSimulator } from "./ProposalSimulator";
 
 const fadeUp = {
   initial: { opacity: 0, y: 30 },

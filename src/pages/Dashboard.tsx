@@ -12,11 +12,11 @@ const fadeUp = {
   animate: { opacity: 1, y: 0 },
 };
 
-const stats = [
-  { label: "Total Funding", value: "247.8 ETH", change: "+12.4%", icon: Wallet, accent: "primary" },
-  { label: "Active Investors", value: "1,284", change: "+89", icon: Users, accent: "primary" },
-  { label: "EDU Tokens", value: "8,420", change: "+340", icon: Coins, accent: "accent" },
-  { label: "Reputation Score", value: "94/100", change: "+2", icon: Award, accent: "accent" },
+const buildStats = (p: ReturnType<typeof useProposal>) => [
+  { label: "Total Funding", value: p ? `${p.raisedEth} ETH` : "0 ETH", change: p ? "+live" : "—", icon: Wallet, accent: "primary" as const },
+  { label: "Active Investors", value: p ? p.investors.toLocaleString() : "0", change: p ? "+new" : "—", icon: Users, accent: "primary" as const },
+  { label: "EDU Tokens", value: p ? `${p.modules.length * 50}` : "0", change: p ? "+50" : "—", icon: Coins, accent: "accent" as const },
+  { label: "Reputation Score", value: p ? `${60 + p.modules.length * 6}/100` : "0/100", change: p ? "+new" : "—", icon: Award, accent: "accent" as const },
 ];
 
 const milestones = [
@@ -45,6 +45,7 @@ const Dashboard = () => {
   const proposal = useProposal();
   const business = proposal?.businessName || "Kopi Nusantara";
   const submittedDate = proposal ? new Date(proposal.submittedAt).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }) : null;
+  const stats = buildStats(proposal);
 
   return (
     <div className="min-h-screen relative">

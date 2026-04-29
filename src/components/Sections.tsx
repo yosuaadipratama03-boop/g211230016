@@ -310,46 +310,30 @@ export const Demo = () => {
     <Section id="demo">
       <SectionHeader
         tag="09 · Demo"
-        title={<>Lihat <span className="text-gradient-mint">platform bekerja</span>, langkah demi langkah.</>}
-        desc="Simulasi alur lengkap dari pendaftaran UMKM hingga pelaporan dana ke investor."
+        title={<>Coba <span className="text-gradient-mint">simulasi langsung</span> — proposal Anda muncul di dashboard.</>}
+        desc="Isi proposal, pilih modul edukasi, ajukan target dana. Smart contract di-deploy secara simulasi dan statusnya langsung tampil di dashboard UMKM."
       />
-      <motion.div {...fadeUp} transition={{ duration: 0.5 }} className="mb-10 flex flex-wrap items-center gap-4">
-        <Link to="/dashboard" className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary-glow px-6 py-3.5 font-semibold text-primary-foreground glow-mint hover:scale-105 transition-transform">
-          Buka Live Dashboard <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-        </Link>
-        <span className="font-mono text-xs text-muted-foreground">Simulasi penuh — tidak perlu wallet</span>
-      </motion.div>
       <div className="grid lg:grid-cols-12 gap-8 items-start">
-        <div className="lg:col-span-7 space-y-4">
+        <div className="lg:col-span-5 space-y-4 lg:sticky lg:top-28">
           {flow.map((f, i) => (
             <motion.div key={f.t} {...fadeUp} transition={{ duration: 0.5, delay: i * 0.08 }}
-              className="glass rounded-2xl p-6 flex items-start gap-5 hover:border-primary/40 transition-colors">
-              <div className="shrink-0 h-12 w-12 rounded-xl bg-gradient-to-br from-primary to-primary-glow grid place-items-center glow-mint">
-                <f.icon className="h-6 w-6 text-primary-foreground" strokeWidth={1.8} />
+              className="glass rounded-2xl p-4 flex items-start gap-4 hover:border-primary/40 transition-colors">
+              <div className="shrink-0 h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-primary-glow grid place-items-center glow-mint">
+                <f.icon className="h-5 w-5 text-primary-foreground" strokeWidth={1.8} />
               </div>
               <div className="flex-1">
-                <div className="font-display font-bold text-lg">{f.t}</div>
-                <div className="text-sm text-muted-foreground mt-1">{f.d}</div>
+                <div className="font-display font-bold text-sm">{f.t}</div>
+                <div className="text-xs text-muted-foreground mt-0.5">{f.d}</div>
               </div>
-              <div className="font-mono text-xs text-primary mt-1">0{i + 1}</div>
+              <div className="font-mono text-[10px] text-primary mt-1">0{i + 1}</div>
             </motion.div>
           ))}
+          <Link to="/dashboard" className="inline-flex items-center gap-2 rounded-xl glass px-5 py-3 text-sm font-medium hover:border-primary/40 transition-colors mt-2">
+            Lihat dashboard kosong <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
-        <motion.div {...fadeUp} transition={{ duration: 0.7 }} className="lg:col-span-5 lg:sticky lg:top-28">
-          <div className="glass rounded-3xl p-3 glow-mint">
-            <div className="flex gap-1.5 px-3 py-2">
-              <div className="h-3 w-3 rounded-full bg-destructive/70" />
-              <div className="h-3 w-3 rounded-full bg-accent/70" />
-              <div className="h-3 w-3 rounded-full bg-primary/70" />
-            </div>
-            <img src={dashboardImg} alt="Dashboard EduChain UMKM" loading="lazy" width={1600} height={1200} className="rounded-2xl w-full h-auto" />
-          </div>
-          <div className="mt-6 glass rounded-2xl p-5 font-mono text-xs leading-relaxed">
-            <div className="text-primary mb-2">// smart contract event</div>
-            <div className="text-muted-foreground">FundReleased(<span className="text-accent">milestone</span>: 2,</div>
-            <div className="text-muted-foreground pl-6">amount: <span className="text-primary">12.5 ETH</span>,</div>
-            <div className="text-muted-foreground pl-6">to: <span className="text-foreground">0xKopiNusantara</span>)</div>
-          </div>
+        <motion.div {...fadeUp} transition={{ duration: 0.7 }} className="lg:col-span-7">
+          <ProposalSimulator />
         </motion.div>
       </div>
     </Section>

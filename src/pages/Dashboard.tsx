@@ -3,19 +3,20 @@ import { Link } from "react-router-dom";
 import {
   ArrowLeft, ArrowUpRight, Wallet, TrendingUp, Users, GraduationCap,
   Coins, CheckCircle2, Clock, PlayCircle, Award, BarChart3, Activity,
-  Link2, Bell, Search, Settings
+  Link2, Bell, Search, Settings, Sparkles, Trash2, Rocket
 } from "lucide-react";
+import { useProposal, setProposal, AVAILABLE_MODULES } from "@/lib/proposalStore";
 
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
 };
 
-const stats = [
-  { label: "Total Funding", value: "247.8 ETH", change: "+12.4%", icon: Wallet, accent: "primary" },
-  { label: "Active Investors", value: "1,284", change: "+89", icon: Users, accent: "primary" },
-  { label: "EDU Tokens", value: "8,420", change: "+340", icon: Coins, accent: "accent" },
-  { label: "Reputation Score", value: "94/100", change: "+2", icon: Award, accent: "accent" },
+const buildStats = (p: ReturnType<typeof useProposal>) => [
+  { label: "Total Funding", value: p ? `${p.raisedEth} ETH` : "0 ETH", change: p ? "+live" : "—", icon: Wallet, accent: "primary" as const },
+  { label: "Active Investors", value: p ? p.investors.toLocaleString() : "0", change: p ? "+new" : "—", icon: Users, accent: "primary" as const },
+  { label: "EDU Tokens", value: p ? `${p.modules.length * 50}` : "0", change: p ? "+50" : "—", icon: Coins, accent: "accent" as const },
+  { label: "Reputation Score", value: p ? `${60 + p.modules.length * 6}/100` : "0/100", change: p ? "+new" : "—", icon: Award, accent: "accent" as const },
 ];
 
 const milestones = [
@@ -41,6 +42,11 @@ const txs = [
 ];
 
 const Dashboard = () => {
+  const proposal = useProposal();
+  const business = proposal?.businessName || "Kopi Nusantara";
+  const submittedDate = proposal ? new Date(proposal.submittedAt).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }) : null;
+  const stats = buildStats(proposal);
+
   return (
     <div className="min-h-screen relative">
       {/* Header */}
@@ -73,7 +79,7 @@ const Dashboard = () => {
             </button>
             <div className="hidden sm:flex items-center gap-2 glass rounded-xl px-3 py-2">
               <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-              <span className="font-mono text-xs">0xKopi...usantara</span>
+              <span className="font-mono text-xs">0x{business.slice(0,4).toUpperCase().replace(/\s/g,"")}...{business.slice(-4).toUpperCase().replace(/\s/g,"")}</span>
             </div>
           </div>
         </div>
@@ -85,14 +91,66 @@ const Dashboard = () => {
           <div>
             <div className="font-mono text-xs text-primary uppercase tracking-wider mb-2">UMKM Dashboard</div>
             <h1 className="font-display font-bold text-4xl md:text-5xl">
-              Halo, <span className="text-gradient-mint">Kopi Nusantara</span>
+              Halo, <span className="text-gradient-mint">{business}</span>
             </h1>
             <p className="text-muted-foreground mt-2">Pantau funding, edukasi, dan transaksi on-chain Anda.</p>
           </div>
-          <button className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary-glow px-5 py-3 font-semibold text-primary-foreground glow-mint hover:scale-105 transition-transform text-sm">
+          <Link to="/#demo" className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary-glow px-5 py-3 font-semibold text-primary-foreground glow-mint hover:scale-105 transition-transform text-sm">
             Buat Proposal Baru <ArrowUpRight className="h-4 w-4" />
-          </button>
+          </Link>
         </motion.div>
+
+        {/* Live proposal banner */}
+        {proposal && (
+          <motion.div {...fadeUp} className="relative glass rounded-3xl p-6 md:p-8 overflow-hidden border-primary/40">
+            <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-primary/20 blur-3xl" />
+            <div className="relative flex flex-wrap items-start gap-6 justify-between">
+              <div className="flex-1 min-w-[260px]">
+                <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 mb-3 text-xs font-mono uppercase tracking-wider text-primary">
+                  <Sparkles className="h-3 w-3" /> Proposal aktif · {proposal.category}
+                </div>
+                <h2 className="font-display font-bold text-2xl md:text-3xl mb-2">{proposal.businessName}</h2>
+                <p className="text-sm text-muted-foreground max-w-xl">{proposal.description}</p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {proposal.modules.map(id => {
+                    const m = AVAILABLE_MODULES.find(x => x.id === id);
+                    return m ? (
+                      <span key={id} className="text-xs font-mono px-2.5 py-1 rounded-md bg-secondary text-foreground/80">
+                        {m.title}
+                      </span>
+                    ) : null;
+                  })}
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="font-mono text-xs text-muted-foreground mb-1">Target / Terkumpul</div>
+                <div className="font-display font-bold text-3xl text-gradient-mint">
+                  {proposal.raisedEth} / {proposal.targetEth} <span className="text-base text-muted-foreground">ETH</span>
+                </div>
+                <div className="text-xs text-muted-foreground font-mono mt-1">{proposal.investors} investor · live sejak {submittedDate}</div>
+                <div className="mt-3 h-2 rounded-full bg-secondary overflow-hidden w-full md:w-72 ml-auto">
+                  <div className="h-full bg-gradient-to-r from-primary to-primary-glow rounded-full transition-all"
+                    style={{ width: `${Math.min(100, (proposal.raisedEth / proposal.targetEth) * 100)}%` }} />
+                </div>
+                <button onClick={() => setProposal(null)}
+                  className="mt-4 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-destructive transition-colors font-mono">
+                  <Trash2 className="h-3 w-3" /> Reset simulasi
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {!proposal && (
+          <motion.div {...fadeUp} className="glass rounded-3xl p-8 text-center border-dashed border-2">
+            <Rocket className="h-10 w-10 text-primary mx-auto mb-3" />
+            <h2 className="font-display font-bold text-xl mb-2">Belum ada proposal aktif</h2>
+            <p className="text-sm text-muted-foreground mb-5">Coba simulasi pengajuan pendanaan di halaman demo.</p>
+            <Link to="/#demo" className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary-glow px-5 py-2.5 text-sm font-semibold text-primary-foreground glow-mint hover:scale-105 transition-transform">
+              Mulai simulasi <ArrowUpRight className="h-4 w-4" />
+            </Link>
+          </motion.div>
+        )}
 
         {/* Stats */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">

@@ -1,5 +1,10 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { toast } from "sonner";
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   AlertTriangle, BookOpen, Coins, Wallet, GraduationCap, BarChart3,
   Shield, Globe2, Award, Zap, FileCheck, Users, Trophy, TrendingUp,

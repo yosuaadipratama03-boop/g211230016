@@ -320,8 +320,13 @@ export const Demo = () => {
       <div className="grid lg:grid-cols-12 gap-8 items-start">
         <div className="lg:col-span-5 space-y-4 lg:sticky lg:top-28">
           {flow.map((f, i) => (
-            <motion.div key={f.t} {...fadeUp} transition={{ duration: 0.5, delay: i * 0.08 }}
-              className="glass rounded-2xl p-4 flex items-start gap-4 hover:border-primary/40 transition-colors">
+            <motion.button key={f.t} {...fadeUp} transition={{ duration: 0.5, delay: i * 0.08 }}
+              type="button"
+              onClick={() => {
+                document.getElementById("proposal-simulator")?.scrollIntoView({ behavior: "smooth", block: "center" });
+                toast.info(`Langkah ${i + 1}: ${f.t}`, { description: f.d });
+              }}
+              className="w-full text-left glass rounded-2xl p-4 flex items-start gap-4 hover:border-primary/40 hover:scale-[1.02] transition-all cursor-pointer">
               <div className="shrink-0 h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-primary-glow grid place-items-center glow-mint">
                 <f.icon className="h-5 w-5 text-primary-foreground" strokeWidth={1.8} />
               </div>
@@ -330,14 +335,16 @@ export const Demo = () => {
                 <div className="text-xs text-muted-foreground mt-0.5">{f.d}</div>
               </div>
               <div className="font-mono text-[10px] text-primary mt-1">0{i + 1}</div>
-            </motion.div>
+            </motion.button>
           ))}
           <Link to="/dashboard" className="inline-flex items-center gap-2 rounded-xl glass px-5 py-3 text-sm font-medium hover:border-primary/40 transition-colors mt-2">
             Lihat dashboard kosong <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
         <motion.div {...fadeUp} transition={{ duration: 0.7 }} className="lg:col-span-7">
-          <ProposalSimulator />
+          <div id="proposal-simulator">
+            <ProposalSimulator />
+          </div>
         </motion.div>
       </div>
     </Section>

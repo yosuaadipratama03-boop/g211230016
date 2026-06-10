@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { Link2, Wallet, Check, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -58,6 +59,9 @@ export const Navbar = () => {
             <a href={l.href} className="hover:text-foreground transition-colors">{l.label}</a>
           </li>
         ))}
+        <li>
+          <Link to="/explore" className="hover:text-foreground transition-colors">Explore</Link>
+        </li>
       </ul>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>

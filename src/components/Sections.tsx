@@ -352,6 +352,41 @@ export const Demo = () => {
 };
 
 /* ---------------- CTA + FOOTER ---------------- */
+const RoleDialog = ({
+  trigger, title, desc, points, primary,
+}: {
+  trigger: React.ReactNode;
+  title: string;
+  desc: string;
+  points: string[];
+  primary: { label: string; to: string };
+}) => (
+  <Dialog>
+    <DialogTrigger asChild>{trigger}</DialogTrigger>
+    <DialogContent className="glass border-border">
+      <DialogHeader>
+        <DialogTitle className="font-display text-2xl">{title}</DialogTitle>
+        <DialogDescription>{desc}</DialogDescription>
+      </DialogHeader>
+      <ul className="space-y-3 mt-2">
+        {points.map((p) => (
+          <li key={p} className="flex items-start gap-3 text-sm">
+            <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+            <span className="text-muted-foreground">{p}</span>
+          </li>
+        ))}
+      </ul>
+      <Link
+        to={primary.to}
+        onClick={() => toast.success("Selamat datang di EduChain UMKM!", { description: "Membuka dashboard simulasi..." })}
+        className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary-glow px-6 py-3 font-semibold text-primary-foreground glow-mint hover:scale-[1.02] transition-transform"
+      >
+        {primary.label} <ArrowRight className="h-4 w-4" />
+      </Link>
+    </DialogContent>
+  </Dialog>
+);
+
 export const CTA = () => (
   <Section>
     <motion.div {...fadeUp} transition={{ duration: 0.7 }}
@@ -367,12 +402,38 @@ export const CTA = () => (
           Bergabung dengan ekosistem terdesentralisasi pertama untuk pendanaan & edukasi UMKM.
         </p>
         <div className="mt-10 flex flex-wrap gap-4 justify-center">
-          <a href="#" className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary-glow px-7 py-4 font-semibold text-primary-foreground glow-mint hover:scale-105 transition-transform">
-            Daftar UMKM <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-          </a>
-          <a href="#" className="inline-flex items-center gap-2 rounded-xl glass px-7 py-4 font-semibold hover:border-accent/40 transition-colors">
-            Jadi Investor
-          </a>
+          <RoleDialog
+            trigger={
+              <button className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary-glow px-7 py-4 font-semibold text-primary-foreground glow-mint hover:scale-105 transition-transform">
+                Daftar UMKM <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+            }
+            title="Daftar sebagai UMKM"
+            desc="Mulai perjalanan pendanaan dan edukasi bisnis Anda secara on-chain."
+            points={[
+              "Connect wallet & verifikasi data bisnis on-chain",
+              "Selesaikan modul edukasi wajib (keuangan & marketing)",
+              "Ajukan proposal pendanaan dengan smart contract milestone",
+              "Pantau realisasi dana real-time dari dashboard",
+            ]}
+            primary={{ label: "Buka Dashboard UMKM", to: "/dashboard" }}
+          />
+          <RoleDialog
+            trigger={
+              <button className="inline-flex items-center gap-2 rounded-xl glass px-7 py-4 font-semibold hover:border-accent/40 transition-colors">
+                Jadi Investor
+              </button>
+            }
+            title="Bergabung sebagai Investor"
+            desc="Danai UMKM potensial dan pantau penggunaan dana secara transparan."
+            points={[
+              "Akses kolam proyek UMKM yang sudah lulus edukasi",
+              "Danai mulai dari pecahan kecil dengan crypto / token EDU",
+              "Dana terkunci di escrow smart contract teraudit",
+              "Laporan ROI & penggunaan dana real-time on-chain",
+            ]}
+            primary={{ label: "Lihat Dashboard Proyek", to: "/dashboard" }}
+          />
         </div>
       </div>
     </motion.div>

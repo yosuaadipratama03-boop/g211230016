@@ -355,7 +355,7 @@ export const Demo = () => {
 const RoleDialog = ({
   trigger, title, desc, points, primary,
 }: {
-  trigger: React.ReactNode;
+  trigger: ReactNode;
   title: string;
   desc: string;
   points: string[];

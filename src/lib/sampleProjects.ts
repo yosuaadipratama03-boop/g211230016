@@ -162,3 +162,74 @@ export const SAMPLE_CATEGORIES = [
 
 export const progressOf = (p: SampleProject) =>
   p.targetEth > 0 ? Math.min(100, (p.raisedEth / p.targetEth) * 100) : 0;
+
+// ---- Derived demo content for the Project Detail page ----
+
+export type MilestoneStatus = "done" | "active" | "upcoming";
+export interface Milestone {
+  title: string;
+  desc: string;
+  date: string;
+  status: MilestoneStatus;
+}
+
+const fmtDate = (ts: number) =>
+  new Date(ts).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
+
+export const milestonesOf = (p: SampleProject): Milestone[] => {
+  const pct = progressOf(p);
+  const base = p.createdAt;
+  const steps: { title: string; desc: string; offset: number; at: number }[] = [
+    { title: "Proposal Diajukan", desc: "UMKM menyelesaikan proposal pendanaan & verifikasi identitas.", offset: 0, at: 0 },
+    { title: "Sertifikasi Edukasi", desc: "Modul edukasi bisnis wajib diselesaikan & diverifikasi on-chain.", offset: 7 * day, at: 5 },
+    { title: "Smart Contract Deploy", desc: "Kontrak escrow pendanaan di-deploy ke jaringan.", offset: 14 * day, at: 15 },
+    { title: "Penggalangan Dana", desc: "Investor mendanai proyek hingga target tercapai.", offset: 21 * day, at: 60 },
+    { title: "Pencairan & Eksekusi", desc: "Dana dilepas per milestone untuk eksekusi bisnis.", offset: 45 * day, at: 100 },
+  ];
+  return steps.map((s) => ({
+    title: s.title,
+    desc: s.desc,
+    date: fmtDate(base + s.offset),
+    status: pct >= s.at ? "done" : pct >= s.at - 20 ? "active" : "upcoming",
+  }));
+};
+
+export type RiskLevel = "Rendah" | "Sedang" | "Tinggi";
+export interface RiskItem {
+  label: string;
+  level: RiskLevel;
+  note: string;
+}
+
+export const riskOf = (p: SampleProject): { overall: RiskLevel; score: number; items: RiskItem[] } => {
+  const pct = progressOf(p);
+  const traction: RiskLevel = p.investors > 100 ? "Rendah" : p.investors > 40 ? "Sedang" : "Tinggi";
+  const funding: RiskLevel = pct >= 80 ? "Rendah" : pct >= 40 ? "Sedang" : "Tinggi";
+  const education: RiskLevel = p.modules.length >= 2 ? "Rendah" : "Sedang";
+  const market: RiskLevel = ["F&B", "Teknologi", "Agrikultur"].includes(p.category) ? "Rendah" : "Sedang";
+  const items: RiskItem[] = [
+    { label: "Validasi Pasar", level: market, note: `Kategori ${p.category} dengan permintaan terverifikasi.` },
+    { label: "Traksi Investor", level: traction, note: `${p.investors} investor telah berpartisipasi.` },
+    { label: "Progres Pendanaan", level: funding, note: `${pct.toFixed(0)}% dari target tercapai.` },
+    { label: "Kesiapan Manajemen", level: education, note: `${p.modules.length} modul edukasi tersertifikasi.` },
+  ];
+  const map: Record<RiskLevel, number> = { Rendah: 1, Sedang: 2, Tinggi: 3 };
+  const avg = items.reduce((a, b) => a + map[b.level], 0) / items.length;
+  const overall: RiskLevel = avg <= 1.5 ? "Rendah" : avg <= 2.3 ? "Sedang" : "Tinggi";
+  const score = Math.round((1 - (avg - 1) / 2) * 100);
+  return { overall, score, items };
+};
+
+export const contractStatusOf = (p: SampleProject) => {
+  if (p.status === "Pending")
+    return { label: "Menunggu Deploy", deployed: false, network: "Lovable Testnet", hash: "—" };
+  return {
+    label: "Terdeploy & Aktif",
+    deployed: true,
+    network: "Lovable Testnet",
+    hash: `0x${p.id.replace(/[^a-z0-9]/g, "").slice(0, 6)}9f${p.investors}c4e1`,
+  };
+};
+
+export const ownerInitials = (name: string) =>
+  name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();

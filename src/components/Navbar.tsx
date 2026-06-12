@@ -62,6 +62,9 @@ export const Navbar = () => {
         <li>
           <Link to="/explore" className="hover:text-foreground transition-colors">Explore</Link>
         </li>
+        <li>
+          <Link to="/transactions" className="hover:text-foreground transition-colors">Transactions</Link>
+        </li>
       </ul>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>

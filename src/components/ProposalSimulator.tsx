@@ -5,6 +5,9 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { ArrowRight, ArrowLeft, Check, FileText, GraduationCap, Coins, Sparkles, Loader2, AlertCircle } from "lucide-react";
 import { AVAILABLE_MODULES, CATEGORIES, setProposal } from "@/lib/proposalStore";
+import { EducationQuiz } from "@/components/EducationQuiz";
+import { QUIZZES, getQuizById, requiredQuizzesPassed, useQuizResults, PASSING_SCORE, type QuizDef } from "@/lib/quizStore";
+import { Trophy, Lock, RotateCcw } from "lucide-react";
 
 const steps = [
   { n: 1, label: "Proposal", icon: FileText },

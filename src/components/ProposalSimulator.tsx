@@ -281,6 +281,9 @@ export const ProposalSimulator = () => {
               );
             })}
             {touched.modules && errors.modules && <ErrorLine msg={errors.modules} />}
+
+            {/* Quiz gate: required-module quizzes */}
+            <QuizGate modules={modules} results={quizResults} onStart={setActiveQuiz} />
           </motion.div>
         )}
 

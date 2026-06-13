@@ -357,6 +357,8 @@ export const ProposalSimulator = () => {
           </button>
         )}
       </div>
+
+      <EducationQuiz quiz={activeQuiz} open={!!activeQuiz} onOpenChange={(o) => !o && setActiveQuiz(null)} />
     </div>
   );
 };

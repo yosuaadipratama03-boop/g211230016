@@ -56,6 +56,8 @@ export const ProposalSimulator = () => {
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const quizResults = useQuizResults();
+  const [activeQuiz, setActiveQuiz] = useState<QuizDef | null>(null);
 
   const [businessName, setBusinessName] = useState("");
   const [category, setCategory] = useState<string>(CATEGORIES[0]);
@@ -90,6 +92,11 @@ export const ProposalSimulator = () => {
     } else if (s === 2) {
       next.modules = validateField("modules", modules);
       if (next.modules) ok = false;
+      // Block progression unless all required-module quizzes are passed.
+      if (!requiredQuizzesPassed(modules)) {
+        next.modules = next.modules ?? "Selesaikan dan lulus semua kuis edukasi (min 80%) sebelum lanjut.";
+        ok = false;
+      }
       setTouched(t => ({ ...t, modules: true }));
     } else if (s === 3) {
       next.target = validateField("target", target);

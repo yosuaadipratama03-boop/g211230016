@@ -5,6 +5,9 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { ArrowRight, ArrowLeft, Check, FileText, GraduationCap, Coins, Sparkles, Loader2, AlertCircle } from "lucide-react";
 import { AVAILABLE_MODULES, CATEGORIES, setProposal } from "@/lib/proposalStore";
+import { EducationQuiz } from "@/components/EducationQuiz";
+import { QUIZZES, getQuizById, requiredQuizzesPassed, useQuizResults, PASSING_SCORE, type QuizDef } from "@/lib/quizStore";
+import { Trophy, Lock, RotateCcw } from "lucide-react";
 
 const steps = [
   { n: 1, label: "Proposal", icon: FileText },
@@ -53,6 +56,8 @@ export const ProposalSimulator = () => {
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const quizResults = useQuizResults();
+  const [activeQuiz, setActiveQuiz] = useState<QuizDef | null>(null);
 
   const [businessName, setBusinessName] = useState("");
   const [category, setCategory] = useState<string>(CATEGORIES[0]);
@@ -87,6 +92,11 @@ export const ProposalSimulator = () => {
     } else if (s === 2) {
       next.modules = validateField("modules", modules);
       if (next.modules) ok = false;
+      // Block progression unless all required-module quizzes are passed.
+      if (!requiredQuizzesPassed(modules)) {
+        next.modules = next.modules ?? "Selesaikan dan lulus semua kuis edukasi (min 80%) sebelum lanjut.";
+        ok = false;
+      }
       setTouched(t => ({ ...t, modules: true }));
     } else if (s === 3) {
       next.target = validateField("target", target);
@@ -271,6 +281,9 @@ export const ProposalSimulator = () => {
               );
             })}
             {touched.modules && errors.modules && <ErrorLine msg={errors.modules} />}
+
+            {/* Quiz gate: required-module quizzes */}
+            <QuizGate modules={modules} results={quizResults} onStart={setActiveQuiz} />
           </motion.div>
         )}
 
@@ -344,6 +357,8 @@ export const ProposalSimulator = () => {
           </button>
         )}
       </div>
+
+      <EducationQuiz quiz={activeQuiz} open={!!activeQuiz} onOpenChange={(o) => !o && setActiveQuiz(null)} />
     </div>
   );
 };
@@ -373,3 +388,91 @@ const Row = ({ k, v }: { k: string; v: string }) => (
     <span className="text-foreground truncate">{v}</span>
   </div>
 );
+
+const QuizGate = ({
+  modules,
+  results,
+  onStart,
+}: {
+  modules: string[];
+  results: ReturnType<typeof useQuizResults>;
+  onStart: (q: QuizDef) => void;
+}) => {
+  const required = QUIZZES.filter((q) => modules.includes(q.moduleId));
+  if (required.length === 0) return null;
+
+  const passedCount = required.filter((q) => results[q.id]?.passed).length;
+  const overall = Math.round((passedCount / required.length) * 100);
+
+  return (
+    <div className="mt-5 space-y-3 rounded-2xl border border-border bg-background/40 p-5">
+      <div className="flex items-center justify-between">
+        <div className="font-display font-semibold flex items-center gap-2">
+          <GraduationCap className="h-4 w-4 text-primary" /> Kuis Edukasi (Wajib Lulus)
+        </div>
+        <span className="text-xs font-mono text-muted-foreground">
+          {passedCount}/{required.length} lulus
+        </span>
+      </div>
+
+      <p className="text-xs text-muted-foreground">
+        Skor minimal {PASSING_SCORE}% untuk setiap kuis sebelum lanjut ke tahap pendanaan.
+      </p>
+
+      <div className="h-1.5 w-full rounded-full bg-secondary overflow-hidden">
+        <div
+          className="h-full bg-gradient-to-r from-primary to-primary-glow transition-all"
+          style={{ width: `${overall}%` }}
+        />
+      </div>
+
+      <div className="space-y-2.5 pt-1">
+        {required.map((quiz) => {
+          const r = results[quiz.id];
+          const passed = r?.passed;
+          return (
+            <div
+              key={quiz.id}
+              className={`flex items-center gap-3 rounded-xl border p-3.5 ${
+                passed ? "border-primary/40 bg-primary/5" : "border-border bg-background/40"
+              }`}
+            >
+              <div
+                className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${
+                  passed ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground"
+                }`}
+              >
+                {passed ? <Trophy className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="font-display font-semibold text-sm truncate">{quiz.title}</div>
+                <div className="text-xs font-mono text-muted-foreground">
+                  {r
+                    ? `Skor terakhir ${r.score}% · ${r.attempts}x percobaan`
+                    : `${quiz.questions.length} soal · belum dikerjakan`}
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => onStart(quiz)}
+                className={`inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-semibold transition-all ${
+                  passed
+                    ? "glass hover:border-primary/40"
+                    : "bg-gradient-to-r from-primary to-primary-glow text-primary-foreground hover:scale-105"
+                }`}
+              >
+                {passed ? (
+                  <>
+                    <RotateCcw className="h-3.5 w-3.5" /> Ulangi
+                  </>
+                ) : (
+                  <>Mulai Kuis</>
+                )}
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};

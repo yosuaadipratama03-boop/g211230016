@@ -11,6 +11,7 @@ import {
   getSampleProject, progressOf, milestonesOf, riskOf, contractStatusOf, ownerInitials,
   type SampleStatus, type RiskLevel,
 } from "@/lib/sampleProjects";
+import { CertificationCard, CertStatusBadge } from "@/components/CertificationCard";
 
 const fadeUp = {
   initial: { opacity: 0, y: 20 },

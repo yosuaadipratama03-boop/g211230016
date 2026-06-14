@@ -306,6 +306,22 @@ const Dashboard = () => {
             </button>
           </motion.div>
         </div>
+
+        {/* Certification */}
+        <motion.div {...fadeUp} transition={{ delay: 0.3 }} className="grid lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <CertificationCard defaultName={business} />
+          </div>
+          <div className="glass rounded-3xl p-7 flex flex-col justify-center">
+            <Award className="h-9 w-9 text-primary mb-3" />
+            <h3 className="font-display font-bold text-xl mb-2">Sertifikasi On-Chain</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Selesaikan modul Keuangan & Pemasaran beserta kuisnya (min. 80%) untuk
+              mendapatkan badge <span className="text-foreground font-medium">Certified EduChain Entrepreneur</span>.
+              Sertifikat tersimpan secara lokal dan tampil di proposal Anda.
+            </p>
+          </div>
+        </motion.div>
       </main>
 
       <footer className="border-t border-border py-8 mt-12">

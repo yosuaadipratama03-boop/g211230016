@@ -236,6 +236,11 @@ const ProjectDetail = () => {
             </div>
           </motion.div>
 
+          {/* Entrepreneur certification */}
+          <motion.div {...fadeUp} transition={{ delay: 0.15 }}>
+            <CertificationCard defaultName={project.owner} />
+          </motion.div>
+
           {/* Smart contract deployment */}
           <motion.div {...fadeUp} transition={{ delay: 0.16 }} className="glass rounded-3xl p-7">
             <div className="flex items-center gap-2 mb-5">

@@ -6,6 +6,7 @@ import {
   Link2, Bell, Search, Settings, Sparkles, Trash2, Rocket
 } from "lucide-react";
 import { useProposal, setProposal, AVAILABLE_MODULES } from "@/lib/proposalStore";
+import { CertificationCard, CertStatusBadge } from "@/components/CertificationCard";
 
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
@@ -94,6 +95,7 @@ const Dashboard = () => {
               Halo, <span className="text-gradient-mint">{business}</span>
             </h1>
             <p className="text-muted-foreground mt-2">Pantau funding, edukasi, dan transaksi on-chain Anda.</p>
+            <div className="mt-3"><CertStatusBadge /></div>
           </div>
           <Link to="/#demo" className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary-glow px-5 py-3 font-semibold text-primary-foreground glow-mint hover:scale-105 transition-transform text-sm">
             Buat Proposal Baru <ArrowUpRight className="h-4 w-4" />
@@ -304,6 +306,22 @@ const Dashboard = () => {
             </button>
           </motion.div>
         </div>
+
+        {/* Certification */}
+        <motion.div {...fadeUp} transition={{ delay: 0.3 }} className="grid lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <CertificationCard defaultName={business} />
+          </div>
+          <div className="glass rounded-3xl p-7 flex flex-col justify-center">
+            <Award className="h-9 w-9 text-primary mb-3" />
+            <h3 className="font-display font-bold text-xl mb-2">Sertifikasi On-Chain</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Selesaikan modul Keuangan & Pemasaran beserta kuisnya (min. 80%) untuk
+              mendapatkan badge <span className="text-foreground font-medium">Certified EduChain Entrepreneur</span>.
+              Sertifikat tersimpan secara lokal dan tampil di proposal Anda.
+            </p>
+          </div>
+        </motion.div>
       </main>
 
       <footer className="border-t border-border py-8 mt-12">

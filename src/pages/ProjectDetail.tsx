@@ -11,6 +11,7 @@ import {
   getSampleProject, progressOf, milestonesOf, riskOf, contractStatusOf, ownerInitials,
   type SampleStatus, type RiskLevel,
 } from "@/lib/sampleProjects";
+import { CertificationCard, CertStatusBadge } from "@/components/CertificationCard";
 
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
@@ -117,6 +118,7 @@ const ProjectDetail = () => {
                     <span className={`inline-flex items-center gap-1.5 text-xs font-mono px-2.5 py-1 rounded-md ${statusStyle[project.status]}`}>
                       <StatusIcon status={project.status} /> {project.status}
                     </span>
+                    <CertStatusBadge />
                   </div>
                   <h1 className="font-display font-bold text-4xl md:text-5xl mb-3">{project.businessName}</h1>
                   <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground font-mono">
@@ -232,6 +234,11 @@ const ProjectDetail = () => {
                 </div>
               ))}
             </div>
+          </motion.div>
+
+          {/* Entrepreneur certification */}
+          <motion.div {...fadeUp} transition={{ delay: 0.15 }}>
+            <CertificationCard defaultName={project.owner} />
           </motion.div>
 
           {/* Smart contract deployment */}

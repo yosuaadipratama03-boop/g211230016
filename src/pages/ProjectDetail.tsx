@@ -118,6 +118,7 @@ const ProjectDetail = () => {
                     <span className={`inline-flex items-center gap-1.5 text-xs font-mono px-2.5 py-1 rounded-md ${statusStyle[project.status]}`}>
                       <StatusIcon status={project.status} /> {project.status}
                     </span>
+                    <CertStatusBadge />
                   </div>
                   <h1 className="font-display font-bold text-4xl md:text-5xl mb-3">{project.businessName}</h1>
                   <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground font-mono">

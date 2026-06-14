@@ -95,6 +95,7 @@ const Dashboard = () => {
               Halo, <span className="text-gradient-mint">{business}</span>
             </h1>
             <p className="text-muted-foreground mt-2">Pantau funding, edukasi, dan transaksi on-chain Anda.</p>
+            <div className="mt-3"><CertStatusBadge /></div>
           </div>
           <Link to="/#demo" className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary-glow px-5 py-3 font-semibold text-primary-foreground glow-mint hover:scale-105 transition-transform text-sm">
             Buat Proposal Baru <ArrowUpRight className="h-4 w-4" />

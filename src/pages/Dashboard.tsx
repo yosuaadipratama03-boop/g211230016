@@ -6,6 +6,7 @@ import {
   Link2, Bell, Search, Settings, Sparkles, Trash2, Rocket
 } from "lucide-react";
 import { useProposal, setProposal, AVAILABLE_MODULES } from "@/lib/proposalStore";
+import { CertificationCard, CertStatusBadge } from "@/components/CertificationCard";
 
 const fadeUp = {
   initial: { opacity: 0, y: 20 },

@@ -149,9 +149,13 @@ const ProjectDetail = () => {
             ))}
           </motion.div>
 
+          {/* Trust Score */}
+          <motion.div {...fadeUp} transition={{ delay: 0.08 }}>
+            <TrustScoreCard result={trust} />
+          </motion.div>
+
           {/* Milestones timeline */}
           <motion.div {...fadeUp} transition={{ delay: 0.1 }} className="glass rounded-3xl p-7">
-            {/* placeholder anchor */}
             <div className="flex items-center gap-2 mb-6">
               <TrendingUp className="h-5 w-5 text-primary" />
               <h2 className="font-display font-bold text-xl">Timeline Milestone Bisnis</h2>

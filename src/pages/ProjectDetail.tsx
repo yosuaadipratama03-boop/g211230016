@@ -12,6 +12,8 @@ import {
   type SampleStatus, type RiskLevel,
 } from "@/lib/sampleProjects";
 import { CertificationCard, CertStatusBadge } from "@/components/CertificationCard";
+import { trustScoreOfProject } from "@/lib/trustScore";
+import { TrustScoreCard, TrustInline } from "@/components/TrustScore";
 
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
@@ -60,6 +62,7 @@ const ProjectDetail = () => {
   const milestones = milestonesOf(project);
   const risk = riskOf(project);
   const contract = contractStatusOf(project);
+  const trust = trustScoreOfProject(project);
 
   const stats = [
     { label: "Terkumpul", value: `${project.raisedEth} ETH`, icon: Wallet },
@@ -119,6 +122,7 @@ const ProjectDetail = () => {
                       <StatusIcon status={project.status} /> {project.status}
                     </span>
                     <CertStatusBadge />
+                    <TrustInline result={trust} />
                   </div>
                   <h1 className="font-display font-bold text-4xl md:text-5xl mb-3">{project.businessName}</h1>
                   <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground font-mono">
@@ -143,6 +147,11 @@ const ProjectDetail = () => {
                 <div className="text-xs text-muted-foreground mt-0.5">{s.label}</div>
               </div>
             ))}
+          </motion.div>
+
+          {/* Trust Score */}
+          <motion.div {...fadeUp} transition={{ delay: 0.08 }}>
+            <TrustScoreCard result={trust} />
           </motion.div>
 
           {/* Milestones timeline */}
@@ -328,6 +337,10 @@ const ProjectDetail = () => {
           <motion.div {...fadeUp} transition={{ delay: 0.15 }} className="glass rounded-3xl p-7">
             <h3 className="font-display font-bold text-lg mb-4">Ringkasan Kepercayaan</h3>
             <div className="space-y-3 text-sm">
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground inline-flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> Trust Score</span>
+                <span className="font-mono">{trust.score}/100 · {trust.level}</span>
+              </div>
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground inline-flex items-center gap-2"><GraduationCap className="h-4 w-4 text-primary" /> Sertifikasi</span>
                 <span className="font-mono">{project.modules.length} modul</span>

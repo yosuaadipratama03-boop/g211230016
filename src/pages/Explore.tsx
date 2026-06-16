@@ -8,6 +8,8 @@ import {
 import {
   SAMPLE_PROJECTS, SAMPLE_CATEGORIES, progressOf, type SampleProject, type SampleStatus,
 } from "@/lib/sampleProjects";
+import { trustScoreOfProject } from "@/lib/trustScore";
+import { TrustInline } from "@/components/TrustScore";
 
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
@@ -37,6 +39,7 @@ const StatusIcon = ({ status }: { status: SampleStatus }) => {
 const ProjectCard = ({ p, index }: { p: SampleProject; index: number }) => {
   const navigate = useNavigate();
   const pct = progressOf(p);
+  const trust = trustScoreOfProject(p);
   return (
     <motion.button
       {...fadeUp}
@@ -54,7 +57,8 @@ const ProjectCard = ({ p, index }: { p: SampleProject; index: number }) => {
       </div>
 
       <h3 className="font-display font-bold text-2xl mb-2 group-hover:text-gradient-mint transition-colors">{p.businessName}</h3>
-      <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 mb-5">{p.description}</p>
+      <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 mb-4">{p.description}</p>
+      <div className="mb-5"><TrustInline result={trust} /></div>
 
       <div className="mt-auto space-y-4">
         <div>

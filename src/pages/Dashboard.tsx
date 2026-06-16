@@ -192,6 +192,13 @@ const Dashboard = () => {
         </div>
 
         <div className="grid lg:grid-cols-3 gap-6">
+          {/* Trust Score */}
+          <motion.div {...fadeUp} transition={{ delay: 0.08 }} className="lg:col-span-3">
+            <TrustScoreCard result={trust} title="Trust Score Proposal" />
+          </motion.div>
+        </div>
+
+        <div className="grid lg:grid-cols-3 gap-6">
           {/* Funding Progress */}
           <motion.div {...fadeUp} transition={{ delay: 0.1 }} className="lg:col-span-2 glass rounded-3xl p-7">
             <div className="flex items-center justify-between mb-6">

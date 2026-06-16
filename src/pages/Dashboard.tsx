@@ -7,6 +7,9 @@ import {
 } from "lucide-react";
 import { useProposal, setProposal, AVAILABLE_MODULES } from "@/lib/proposalStore";
 import { CertificationCard, CertStatusBadge } from "@/components/CertificationCard";
+import { useCertification } from "@/lib/certStore";
+import { computeTrust } from "@/lib/trustScore";
+import { TrustScoreCard, TrustInline } from "@/components/TrustScore";
 
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
@@ -44,9 +47,23 @@ const txs = [
 
 const Dashboard = () => {
   const proposal = useProposal();
+  const { status: eduStatus } = useCertification();
   const business = proposal?.businessName || "Kopi Nusantara";
   const submittedDate = proposal ? new Date(proposal.submittedAt).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }) : null;
   const stats = buildStats(proposal);
+
+  // Live trust score for the user's own proposal (education pulled from quizzes/cert).
+  const passedModules = [eduStatus.finance && "finance", eduStatus.marketing && "marketing"].filter(Boolean) as string[];
+  const trust = computeTrust({
+    modules: proposal ? proposal.modules : passedModules,
+    descriptionLength: proposal?.description.length ?? 140,
+    hasTarget: (proposal?.targetEth ?? 55) > 0,
+    hasCategory: !!(proposal?.category ?? "F&B"),
+    walletConnected: true,
+    verified: !!proposal,
+    progressPct: proposal ? Math.min(100, (proposal.raisedEth / proposal.targetEth) * 100) : 100,
+    investors: proposal?.investors ?? 127,
+  });
 
   return (
     <div className="min-h-screen relative">

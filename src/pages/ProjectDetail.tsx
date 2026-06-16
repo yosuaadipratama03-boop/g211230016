@@ -338,6 +338,10 @@ const ProjectDetail = () => {
             <h3 className="font-display font-bold text-lg mb-4">Ringkasan Kepercayaan</h3>
             <div className="space-y-3 text-sm">
               <div className="flex items-center justify-between">
+                <span className="text-muted-foreground inline-flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> Trust Score</span>
+                <span className="font-mono">{trust.score}/100 · {trust.level}</span>
+              </div>
+              <div className="flex items-center justify-between">
                 <span className="text-muted-foreground inline-flex items-center gap-2"><GraduationCap className="h-4 w-4 text-primary" /> Sertifikasi</span>
                 <span className="font-mono">{project.modules.length} modul</span>
               </div>

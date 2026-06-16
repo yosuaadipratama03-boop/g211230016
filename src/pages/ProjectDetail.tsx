@@ -12,6 +12,8 @@ import {
   type SampleStatus, type RiskLevel,
 } from "@/lib/sampleProjects";
 import { CertificationCard, CertStatusBadge } from "@/components/CertificationCard";
+import { trustScoreOfProject } from "@/lib/trustScore";
+import { TrustScoreCard, TrustInline } from "@/components/TrustScore";
 
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
@@ -60,6 +62,7 @@ const ProjectDetail = () => {
   const milestones = milestonesOf(project);
   const risk = riskOf(project);
   const contract = contractStatusOf(project);
+  const trust = trustScoreOfProject(project);
 
   const stats = [
     { label: "Terkumpul", value: `${project.raisedEth} ETH`, icon: Wallet },
@@ -119,6 +122,7 @@ const ProjectDetail = () => {
                       <StatusIcon status={project.status} /> {project.status}
                     </span>
                     <CertStatusBadge />
+                    <TrustInline result={trust} />
                   </div>
                   <h1 className="font-display font-bold text-4xl md:text-5xl mb-3">{project.businessName}</h1>
                   <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground font-mono">

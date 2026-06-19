@@ -53,6 +53,13 @@ export const Navbar = () => {
           EduChain<span className="text-gradient-mint"> UMKM</span>
         </div>
       </a>
+      {/* Author info — top right corner */}
+      <div className="hidden lg:flex items-center gap-3 ml-auto mr-4 text-[10px] text-muted-foreground/80 text-right leading-tight">
+        <div>
+          <div className="font-semibold text-foreground/90">YOSUA CHRISTIAN ADI PRATAMA</div>
+          <div className="tracking-wider">NIM: G.211.23.0016</div>
+        </div>
+      </div>
       <ul className="hidden md:flex items-center gap-8 text-sm text-muted-foreground font-medium">
         {links.map((l) => (
           <li key={l.href}>

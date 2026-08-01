@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import {
   ArrowLeft, ArrowUpRight, Wallet, TrendingUp, Users, GraduationCap,
   Coins, CheckCircle2, Clock, PlayCircle, Award, BarChart3, Activity,
@@ -10,6 +11,10 @@ import { CertificationCard, CertStatusBadge } from "@/components/CertificationCa
 import { useCertification } from "@/lib/certStore";
 import { computeTrust } from "@/lib/trustScore";
 import { TrustScoreCard, TrustInline } from "@/components/TrustScore";
+import { ModuleDetailDialog } from "@/components/ModuleDetailDialog";
+import { getModuleContent, type ModuleContent } from "@/lib/moduleContent";
+import { EducationQuiz } from "@/components/EducationQuiz";
+import { getQuizById, type QuizDef } from "@/lib/quizStore";
 
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
@@ -48,6 +53,9 @@ const txs = [
 const Dashboard = () => {
   const proposal = useProposal();
   const { status: eduStatus } = useCertification();
+  const [activeModule, setActiveModule] = useState<(ModuleContent & { progress: number }) | null>(null);
+  const [moduleOpen, setModuleOpen] = useState(false);
+  const [activeQuiz, setActiveQuiz] = useState<QuizDef | null>(null);
   const business = proposal?.businessName || "Kopi Nusantara";
   const submittedDate = proposal ? new Date(proposal.submittedAt).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }) : null;
   const stats = buildStats(proposal);

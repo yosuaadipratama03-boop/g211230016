@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import {
   ArrowLeft, ArrowUpRight, Wallet, TrendingUp, Users, GraduationCap,
   Coins, CheckCircle2, Clock, PlayCircle, Award, BarChart3, Activity,
@@ -10,6 +11,10 @@ import { CertificationCard, CertStatusBadge } from "@/components/CertificationCa
 import { useCertification } from "@/lib/certStore";
 import { computeTrust } from "@/lib/trustScore";
 import { TrustScoreCard, TrustInline } from "@/components/TrustScore";
+import { ModuleDetailDialog } from "@/components/ModuleDetailDialog";
+import { getModuleContent, type ModuleContent } from "@/lib/moduleContent";
+import { EducationQuiz } from "@/components/EducationQuiz";
+import { getQuizById, type QuizDef } from "@/lib/quizStore";
 
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
@@ -48,6 +53,9 @@ const txs = [
 const Dashboard = () => {
   const proposal = useProposal();
   const { status: eduStatus } = useCertification();
+  const [activeModule, setActiveModule] = useState<(ModuleContent & { progress: number }) | null>(null);
+  const [moduleOpen, setModuleOpen] = useState(false);
+  const [activeQuiz, setActiveQuiz] = useState<QuizDef | null>(null);
   const business = proposal?.businessName || "Kopi Nusantara";
   const submittedDate = proposal ? new Date(proposal.submittedAt).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }) : null;
   const stats = buildStats(proposal);
@@ -290,7 +298,19 @@ const Dashboard = () => {
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               {courses.map((c) => (
-                <div key={c.title} className="rounded-2xl bg-background/40 border border-border p-5 hover:border-primary/40 transition-colors group cursor-pointer">
+                <motion.button
+                  key={c.title}
+                  type="button"
+                  whileHover={{ y: -3 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => {
+                    const content = getModuleContent(c.title);
+                    if (!content) return;
+                    setActiveModule({ ...content, progress: c.progress });
+                    setModuleOpen(true);
+                  }}
+                  aria-label={`Buka detail modul ${c.title}`}
+                  className="text-left w-full rounded-2xl bg-background/40 border border-border p-5 hover:border-primary/40 transition-colors group cursor-pointer">
                   <div className="flex items-start justify-between mb-4">
                     <PlayCircle className="h-8 w-8 text-primary group-hover:scale-110 transition-transform" strokeWidth={1.5} />
                     <span className={`text-xs font-mono px-2 py-1 rounded-md ${
@@ -303,7 +323,7 @@ const Dashboard = () => {
                     <div className="h-full bg-gradient-to-r from-primary to-primary-glow rounded-full transition-all" style={{ width: `${c.progress}%` }} />
                   </div>
                   <div className="text-xs text-muted-foreground font-mono mt-2">{c.progress}% complete</div>
-                </div>
+                </motion.button>
               ))}
             </div>
           </motion.div>
@@ -356,6 +376,19 @@ const Dashboard = () => {
           Live on EduChain Mainnet · Block #18,492,331
         </div>
       </footer>
+
+      <ModuleDetailDialog
+        module={activeModule}
+        open={moduleOpen}
+        onOpenChange={setModuleOpen}
+        onStartLearning={() => setModuleOpen(false)}
+        onTakeQuiz={(quizId) => {
+          const q = getQuizById(quizId);
+          setModuleOpen(false);
+          if (q) setActiveQuiz(q);
+        }}
+      />
+      <EducationQuiz quiz={activeQuiz} open={!!activeQuiz} onOpenChange={(o) => !o && setActiveQuiz(null)} />
     </div>
   );
 };

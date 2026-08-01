@@ -298,7 +298,19 @@ const Dashboard = () => {
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               {courses.map((c) => (
-                <div key={c.title} className="rounded-2xl bg-background/40 border border-border p-5 hover:border-primary/40 transition-colors group cursor-pointer">
+                <motion.button
+                  key={c.title}
+                  type="button"
+                  whileHover={{ y: -3 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => {
+                    const content = getModuleContent(c.title);
+                    if (!content) return;
+                    setActiveModule({ ...content, progress: c.progress });
+                    setModuleOpen(true);
+                  }}
+                  aria-label={`Buka detail modul ${c.title}`}
+                  className="text-left w-full rounded-2xl bg-background/40 border border-border p-5 hover:border-primary/40 transition-colors group cursor-pointer">
                   <div className="flex items-start justify-between mb-4">
                     <PlayCircle className="h-8 w-8 text-primary group-hover:scale-110 transition-transform" strokeWidth={1.5} />
                     <span className={`text-xs font-mono px-2 py-1 rounded-md ${
@@ -311,7 +323,7 @@ const Dashboard = () => {
                     <div className="h-full bg-gradient-to-r from-primary to-primary-glow rounded-full transition-all" style={{ width: `${c.progress}%` }} />
                   </div>
                   <div className="text-xs text-muted-foreground font-mono mt-2">{c.progress}% complete</div>
-                </div>
+                </motion.button>
               ))}
             </div>
           </motion.div>

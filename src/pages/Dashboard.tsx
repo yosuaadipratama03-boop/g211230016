@@ -376,6 +376,19 @@ const Dashboard = () => {
           Live on EduChain Mainnet · Block #18,492,331
         </div>
       </footer>
+
+      <ModuleDetailDialog
+        module={activeModule}
+        open={moduleOpen}
+        onOpenChange={setModuleOpen}
+        onStartLearning={() => setModuleOpen(false)}
+        onTakeQuiz={(quizId) => {
+          const q = getQuizById(quizId);
+          setModuleOpen(false);
+          if (q) setActiveQuiz(q);
+        }}
+      />
+      <EducationQuiz quiz={activeQuiz} open={!!activeQuiz} onOpenChange={(o) => !o && setActiveQuiz(null)} />
     </div>
   );
 };

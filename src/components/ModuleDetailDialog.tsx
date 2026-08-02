@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Clock, Gauge, Target, BookOpen, Sparkles, PlayCircle, GraduationCap } from "lucide-react";
+import { Clock, Gauge, Target, BookOpen, Sparkles, PlayCircle, GraduationCap, FileText, ListChecks } from "lucide-react";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
 } from "@/components/ui/dialog";
@@ -55,6 +55,12 @@ export const ModuleDetailDialog = ({ module, open, onOpenChange, onTakeQuiz, onS
             </div>
           </motion.div>
 
+          {/* Overview */}
+          <motion.section variants={item}>
+            <SectionTitle icon={FileText}>Overview</SectionTitle>
+            <p className="text-sm text-muted-foreground leading-relaxed">{module.overview}</p>
+          </motion.section>
+
           {/* Objectives */}
           <motion.section variants={item}>
             <SectionTitle icon={Target}>Learning Objectives</SectionTitle>
@@ -77,6 +83,14 @@ export const ModuleDetailDialog = ({ module, open, onOpenChange, onTakeQuiz, onS
                   <p className="text-sm text-muted-foreground leading-relaxed">{s.body}</p>
                 </div>
               ))}
+            </div>
+          </motion.section>
+
+          {/* Summary */}
+          <motion.section variants={item}>
+            <SectionTitle icon={ListChecks}>Summary</SectionTitle>
+            <div className="rounded-2xl bg-primary/5 border border-primary/20 p-4">
+              <p className="text-sm text-muted-foreground leading-relaxed">{module.summary}</p>
             </div>
           </motion.section>
 

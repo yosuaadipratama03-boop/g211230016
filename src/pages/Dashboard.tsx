@@ -14,7 +14,8 @@ import { TrustScoreCard, TrustInline } from "@/components/TrustScore";
 import { ModuleDetailDialog } from "@/components/ModuleDetailDialog";
 import { getModuleContent, type ModuleContent } from "@/lib/moduleContent";
 import { EducationQuiz } from "@/components/EducationQuiz";
-import { getQuizById, type QuizDef } from "@/lib/quizStore";
+import { getQuizById, useQuizResults, type QuizDef, type QuizResult } from "@/lib/quizStore";
+import { ModuleCompletionDialog, type ModuleCompletion } from "@/components/ModuleCompletionDialog";
 
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
@@ -35,11 +36,11 @@ const milestones = [
   { name: "Distribusi & marketing", status: "pending", amount: "9.5 ETH", date: "—" },
 ];
 
-const courses = [
-  { title: "Manajemen Keuangan UMKM", progress: 100, status: "Sertifikasi NFT" },
-  { title: "Pemasaran Digital Lanjutan", progress: 72, status: "Sedang berjalan" },
-  { title: "Strategi Ekspansi Pasar", progress: 30, status: "Modul 3/10" },
-  { title: "Smart Contract untuk Bisnis", progress: 0, status: "Belum dimulai" },
+const baseCourses = [
+  { title: "Manajemen Keuangan UMKM", progress: 100, status: "Sertifikasi NFT", quizId: "finance" },
+  { title: "Pemasaran Digital Lanjutan", progress: 72, status: "Sedang berjalan", quizId: "marketing" },
+  { title: "Strategi Ekspansi Pasar", progress: 30, status: "Modul 3/10", quizId: undefined },
+  { title: "Smart Contract untuk Bisnis", progress: 0, status: "Belum dimulai", quizId: undefined },
 ];
 
 const txs = [
@@ -56,6 +57,17 @@ const Dashboard = () => {
   const [activeModule, setActiveModule] = useState<(ModuleContent & { progress: number }) | null>(null);
   const [moduleOpen, setModuleOpen] = useState(false);
   const [activeQuiz, setActiveQuiz] = useState<QuizDef | null>(null);
+  const quizResults = useQuizResults();
+  const [completion, setCompletion] = useState<ModuleCompletion | null>(null);
+  const [pendingCompletion, setPendingCompletion] = useState<ModuleCompletion | null>(null);
+
+  // A module counts as Completed once its quiz is passed.
+  const courses = baseCourses.map((c) => {
+    const passed = c.quizId ? quizResults[c.quizId]?.passed : false;
+    return passed
+      ? { ...c, progress: 100, status: "Selesai · NFT" }
+      : c;
+  });
   const business = proposal?.businessName || "Kopi Nusantara";
   const submittedDate = proposal ? new Date(proposal.submittedAt).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }) : null;
   const stats = buildStats(proposal);

@@ -30,9 +30,10 @@ interface Props {
   quiz: QuizDef | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onPassed?: (result: QuizResult) => void;
 }
 
-export const EducationQuiz = ({ quiz, open, onOpenChange }: Props) => {
+export const EducationQuiz = ({ quiz, open, onOpenChange, onPassed }: Props) => {
   const [phase, setPhase] = useState<Phase>("quiz");
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
@@ -75,6 +76,7 @@ export const EducationQuiz = ({ quiz, open, onOpenChange }: Props) => {
       toast.success(`Lulus! Skor ${r.score}%`, {
         description: "Modul edukasi ini telah selesai.",
       });
+      onPassed?.(r);
     } else {
       toast.error(`Belum lulus — skor ${r.score}% (min ${PASSING_SCORE}%)`, {
         description: "Pelajari pembahasan lalu coba lagi.",

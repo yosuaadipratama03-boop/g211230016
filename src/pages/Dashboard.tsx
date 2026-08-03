@@ -400,7 +400,35 @@ const Dashboard = () => {
           if (q) setActiveQuiz(q);
         }}
       />
-      <EducationQuiz quiz={activeQuiz} open={!!activeQuiz} onOpenChange={(o) => !o && setActiveQuiz(null)} />
+      <EducationQuiz
+        quiz={activeQuiz}
+        open={!!activeQuiz}
+        onPassed={(r: QuizResult) => {
+          const title =
+            baseCourses.find((c) => c.quizId === r.quizId)?.title ?? activeQuiz?.title ?? "Modul Edukasi";
+          setPendingCompletion({
+            moduleTitle: title,
+            score: r.score,
+            xp: 100 + r.score * 2,
+            certId: `NFT-EDU-${r.quizId.toUpperCase()}-${String(r.completedAt).slice(-6)}`,
+          });
+        }}
+        onOpenChange={(o) => {
+          if (!o) {
+            setActiveQuiz(null);
+            if (pendingCompletion) {
+              setCompletion(pendingCompletion);
+              setPendingCompletion(null);
+            }
+          }
+        }}
+      />
+
+      <ModuleCompletionDialog
+        completion={completion}
+        open={!!completion}
+        onOpenChange={(o) => !o && setCompletion(null)}
+      />
     </div>
   );
 };

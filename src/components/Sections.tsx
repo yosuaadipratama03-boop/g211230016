@@ -442,9 +442,12 @@ export const CTA = () => (
 
 export const Footer = () => (
   <footer className="border-t border-border py-12 mt-12">
-    <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+    <div className="container mx-auto px-6 flex flex-col items-center text-center gap-2">
       <div className="font-display font-bold">EduChain<span className="text-gradient-mint"> UMKM</span></div>
-      <div className="text-sm text-muted-foreground font-mono">© 2026 · Built on-chain for the next billion entrepreneurs.</div>
+      <div className="text-sm text-muted-foreground max-w-xl leading-relaxed">
+        Ekosistem Smart Economy berbasis Web3 untuk crowdfunding, edukasi, dan digitalisasi UMKM.
+      </div>
+      <div className="text-xs text-muted-foreground/70 font-mono">© 2026 · Built on-chain for the next billion entrepreneurs.</div>
     </div>
   </footer>
 );

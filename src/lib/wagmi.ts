@@ -3,7 +3,9 @@ import { sepolia } from "wagmi/chains";
 import { injected, walletConnect, coinbaseWallet } from "wagmi/connectors";
 
 // Public WalletConnect Cloud project ID (https://cloud.reown.com). Not a secret.
-export const WALLETCONNECT_PROJECT_ID = (import.meta.env.VITE_WALLETCONNECT_PROJECT_ID as string | undefined)?.trim() || "";
+export const WALLETCONNECT_PROJECT_ID =
+  (import.meta.env.VITE_WALLETCONNECT_PROJECT_ID as string | undefined)?.trim() ||
+  "770d0e31e43c9546ff55c536115fb18b";
 
 export const TARGET_CHAIN = sepolia;
 

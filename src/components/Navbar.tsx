@@ -209,3 +209,10 @@ export const Navbar = () => {
   </motion.header>
   );
 };
+
+const Row = ({ label, children }: { label: string; children: React.ReactNode }) => (
+  <div className="flex items-center justify-between gap-3">
+    <span className="text-muted-foreground">{label}</span>
+    <span>{children}</span>
+  </div>
+);

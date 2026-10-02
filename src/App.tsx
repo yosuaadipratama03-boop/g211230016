@@ -10,10 +10,13 @@ import Explore from "./pages/Explore.tsx";
 import ProjectDetail from "./pages/ProjectDetail.tsx";
 import Transactions from "./pages/Transactions.tsx";
 import Portfolio from "./pages/Portfolio.tsx";
+import { WagmiProvider } from "wagmi";
+import { wagmiConfig } from "@/lib/wagmi";
 
 const queryClient = new QueryClient();
 
 const App = () => (
+  <WagmiProvider config={wagmiConfig}>
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
@@ -32,6 +35,7 @@ const App = () => (
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
+  </WagmiProvider>
 );
 
 export default App;

@@ -7,6 +7,7 @@ import {
   BarChart3, ArrowUpRight, Globe, ShieldCheck,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useAccount } from "wagmi";
 import {
   PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer,
 } from "recharts";
@@ -50,9 +51,11 @@ const Portfolio = () => {
   const distribution = distributionByCategory();
   const monthly = monthlyActivity();
 
-  const walletAddress = "0xa3f1c8d2e4b9a7f6c5d4e3b2a1908f7e6d5c4b3a";
+  const { address, isConnected, chainId } = useAccount();
+  const walletAddress = address ?? "";
 
   const handleCopy = () => {
+    if (!walletAddress) return;
     navigator.clipboard.writeText(walletAddress).then(() => {
       setCopied(true);
       toast.success("Alamat wallet disalin");
@@ -281,7 +284,7 @@ const Portfolio = () => {
                 <div className="rounded-xl bg-background/40 border border-border p-4">
                   <div className="text-xs text-muted-foreground mb-1">Wallet Address</div>
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-xs break-all">{`${walletAddress.slice(0, 14)}...${walletAddress.slice(-6)}`}</span>
+                    <span className="font-mono text-xs break-all">{walletAddress ? `${walletAddress.slice(0, 14)}...${walletAddress.slice(-6)}` : "Belum terhubung"}</span>
                     <button
                       onClick={handleCopy}
                       className="h-7 w-7 rounded-md grid place-items-center hover:bg-muted transition-colors shrink-0"
@@ -299,7 +302,7 @@ const Portfolio = () => {
                   </div>
                   <span className="text-xs font-mono px-2.5 py-1 rounded-md bg-primary/10 text-primary border border-primary/30 flex items-center gap-1.5">
                     <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse-glow" />
-                    Connected
+                    {isConnected ? "Connected" : "Disconnected"}
                   </span>
                 </div>
 
@@ -308,7 +311,7 @@ const Portfolio = () => {
                     <Globe className="h-4 w-4 text-accent" />
                     <span className="text-sm font-medium">Network</span>
                   </div>
-                  <span className="text-xs font-mono text-accent">Lovable Testnet</span>
+                  <span className="text-xs font-mono text-accent">{!isConnected ? "-" : chainId === 11155111 ? "Sepolia Testnet" : `Wrong Network (${chainId})`}</span>
                 </div>
 
                 <div className="rounded-xl bg-background/40 border border-border p-4">

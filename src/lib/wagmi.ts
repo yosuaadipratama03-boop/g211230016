@@ -2,10 +2,13 @@ import { http, createConfig } from "wagmi";
 import { sepolia } from "wagmi/chains";
 import { injected, walletConnect, coinbaseWallet } from "wagmi/connectors";
 
-// Public WalletConnect Cloud project ID (https://cloud.reown.com). Not a secret.
+// Public WalletConnect Cloud project ID (https://cloud.reown.com), read from env only.
 export const WALLETCONNECT_PROJECT_ID =
-  (import.meta.env.VITE_WALLETCONNECT_PROJECT_ID as string | undefined)?.trim() ||
-  "770d0e31e43c9546ff55c536115fb18b";
+  (import.meta.env.VITE_WALLETCONNECT_PROJECT_ID as string | undefined)?.trim() || "";
+
+if (!WALLETCONNECT_PROJECT_ID) {
+  console.warn("[wallet] VITE_WALLETCONNECT_PROJECT_ID tidak ditemukan — WalletConnect dinonaktifkan.");
+}
 
 export const TARGET_CHAIN = sepolia;
 

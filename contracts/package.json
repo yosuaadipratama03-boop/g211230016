@@ -1,0 +1,17 @@
+{
+  "name": "educhain-contracts",
+  "private": true,
+  "description": "EduChain UMKM WP1 smart contracts (Sepolia Testnet only)",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "coverage": "hardhat coverage",
+    "deploy:sepolia": "hardhat run scripts/deploy.js --network sepolia",
+    "slither": "slither . --config-file slither.config.json"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@openzeppelin/contracts": "5.1.0",
+    "hardhat": "2.22.17"
+  }
+}

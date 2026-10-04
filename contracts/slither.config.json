@@ -1,0 +1,5 @@
+{
+  "filter_paths": "node_modules|contracts/test",
+  "exclude_informational": false,
+  "solc_remaps": "@openzeppelin/=node_modules/@openzeppelin/"
+}

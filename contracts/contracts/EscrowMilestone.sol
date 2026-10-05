@@ -89,7 +89,7 @@ contract EscrowMilestone is AccessControl, Pausable, ReentrancyGuard {
         if (durationSeconds < 1 hours || durationSeconds > 365 days) revert InvalidParams();
         if (bytes(metadataURI).length > 256) revert InvalidParams();
 
-        uint256 total;
+        uint256 total = 0;
         for (uint256 i = 0; i < n; i++) {
             if (milestoneBps[i] == 0) revert InvalidParams();
             total += milestoneBps[i];

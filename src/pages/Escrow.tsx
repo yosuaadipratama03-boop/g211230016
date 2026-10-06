@@ -26,9 +26,10 @@ function useTx(onConfirmed?: () => void) {
   const [err, setErr] = useState<string>();
   const receipt = useWaitForTransactionReceipt({ hash, chainId: CONTRACT_CHAIN_ID });
   useEffect(() => { if (receipt.isSuccess) onConfirmed?.(); }, [receipt.isSuccess]); // eslint-disable-line
-  const send = async (args: Parameters<typeof writeContractAsync>[0]) => {
+  const send = async (args: { functionName: string; args: readonly unknown[]; value?: bigint; [k: string]: unknown }) => {
     setErr(undefined); setHash(undefined);
-    try { setHash(await writeContractAsync(args)); }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    try { setHash(await writeContractAsync({ ...(args as any), address: ESCROW_ADDRESS!, abi: escrowAbi, chainId: CONTRACT_CHAIN_ID })); }
     catch (e) { const m = friendlyWalletError(e, "Wallet"); setErr(m); toast.error(m); }
   };
   const state = isPending ? "wallet" : hash && receipt.isLoading ? "submitted"

@@ -29,7 +29,7 @@ function useTx(onConfirmed?: () => void) {
   const send = async (args: Parameters<typeof writeContractAsync>[0]) => {
     setErr(undefined); setHash(undefined);
     try { setHash(await writeContractAsync(args)); }
-    catch (e) { const m = friendlyWalletError(e); setErr(m); toast.error(m); }
+    catch (e) { const m = friendlyWalletError(e, "Wallet"); setErr(m); toast.error(m); }
   };
   const state = isPending ? "wallet" : hash && receipt.isLoading ? "submitted"
     : receipt.isSuccess ? (receipt.data.status === "success" ? "confirmed" : "failed")
@@ -151,7 +151,7 @@ const Escrow = () => {
           ) : wrongNetwork ? (
             <span className="inline-flex items-center gap-2 text-destructive">
               <AlertTriangle className="h-4 w-4" /> Wrong Network
-              <button disabled={switching} onClick={() => switchChainAsync({ chainId: CONTRACT_CHAIN_ID }).catch((e) => toast.error(friendlyWalletError(e)))} className={btn}>
+              <button disabled={switching} onClick={() => switchChainAsync({ chainId: CONTRACT_CHAIN_ID }).catch((e) => toast.error(friendlyWalletError(e, "Wallet")))} className={btn}>
                 Pindah ke Sepolia
               </button>
             </span>

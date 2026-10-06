@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import {
   ArrowLeft, Link2, Users, Coins, Wallet, MapPin, GraduationCap,
@@ -42,6 +42,7 @@ const ProjectDetail = () => {
   const { id = "" } = useParams();
   const project = getSampleProject(id);
   const [funded, setFunded] = useState(false);
+  const navigate = useNavigate();
 
   if (!project) {
     return (
@@ -76,10 +77,12 @@ const ProjectDetail = () => {
       toast.info("Proyek ini sudah terdanai penuh.");
       return;
     }
+    // Sample (demo) projects are not on-chain: send the user to the real Sepolia escrow instead of faking a transaction.
     setFunded(true);
-    toast.success(`Berhasil mendanai ${project.businessName} (simulasi)`, {
-      description: "Transaksi dikirim ke smart contract EduChain.",
+    toast.info("Proyek contoh ini belum on-chain.", {
+      description: "Pendanaan nyata (Sepolia Testnet, token uji) dilakukan di halaman Escrow.",
     });
+    navigate("/escrow");
   };
 
   return (

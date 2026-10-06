@@ -1,0 +1,2 @@
+- Smart contracts live in `contracts/` (separate Hardhat project, not part of the Vite build); the frontend only consumes ABIs from `src/lib/contractAbis.ts` (regenerate after contract changes) and public addresses via `VITE_ESCROW_CONTRACT_ADDRESS` / `VITE_TRUST_REGISTRY_ADDRESS` — keeps private keys out of the browser bundle.
+- On-chain flows target Sepolia only (chain id from `TARGET_CHAIN`); sample/demo projects must never fake on-chain transactions — avoids misleading users.
